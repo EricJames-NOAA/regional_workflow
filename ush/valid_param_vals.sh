@@ -20,6 +20,7 @@ valid_vals_PREDEF_GRID_NAME=( \
 "GSL_HAFSV0.A_3km" \
 "GSD_HRRR_AK_50km" \
 "GSD_RAP13km" \
+"RRFS_NA_3km" \
 )
 valid_vals_CCPP_PHYS_SUITE=( \
 "FV3_CPT_v0" \
@@ -30,15 +31,18 @@ valid_vals_CCPP_PHYS_SUITE=( \
 "FV3_GFS_v15p2" \
 "FV3_GFS_v16beta" \
 "FV3_RRFS_v1beta" \
+"FV3_RRFS_v1alpha" \
+"FV3_HRRR" \
+"FV3_RAP" \
 ) 
 valid_vals_GFDLgrid_RES=("48" "96" "192" "384" "768" "1152" "3072")
 valid_vals_EXTRN_MDL_NAME_ICS=("GSMGFS" "FV3GFS" "RAP" "HRRR" "NAM")
 valid_vals_EXTRN_MDL_NAME_LBCS=("GSMGFS" "FV3GFS" "RAP" "HRRR" "NAM")
 valid_vals_USE_USER_STAGED_EXTRN_FILES=("TRUE" "true" "YES" "yes" "FALSE" "false" "NO" "no")
-valid_vals_FV3GFS_FILE_FMT_ICS=("nemsio" "grib2")
-valid_vals_FV3GFS_FILE_FMT_LBCS=("nemsio" "grib2")
+valid_vals_FV3GFS_FILE_FMT_ICS=("nemsio" "grib2" "netcdf")
+valid_vals_FV3GFS_FILE_FMT_LBCS=("nemsio" "grib2" "netcdf")
 valid_vals_GRID_GEN_METHOD=("GFDLgrid" "ESGgrid")
-valid_vals_PREEXISTING_DIR_METHOD=("delete" "rename" "quit")
+valid_vals_PREEXISTING_DIR_METHOD=("delete" "upgrade" "rename" "quit")
 valid_vals_GTYPE=("regional")
 valid_vals_WRTCMP_output_grid=("rotated_latlon" "lambert_conformal" "regional_latlon")
 valid_vals_RUN_TASK_MAKE_GRID=("TRUE" "true" "YES" "yes" "FALSE" "false" "NO" "no")
@@ -51,6 +55,11 @@ valid_vals_DOT_OR_USCORE=("." "_")
 valid_vals_NOMADS=("TRUE" "true" "YES" "yes" "FALSE" "false" "NO" "no")
 valid_vals_NOMADS_file_type=("GRIB2" "grib2" "NEMSIO" "nemsio")
 valid_vals_DO_ENSEMBLE=("TRUE" "true" "YES" "yes" "FALSE" "false" "NO" "no")
+valid_vals_DO_DACYCLE=("TRUE" "true" "YES" "yes" "FALSE" "false" "NO" "no")
+valid_vals_DO_RETRO=("TRUE" "true" "FALSE" "false" "NO" "no")
+valid_vals_LBCS_ICS_ONLY=("TRUE" "true" "FALSE" "false" "NO" "no")
+valid_vals_DO_NONVAR_CLDANAL=("TRUE" "true" "FALSE" "false" "NO" "no")
+valid_vals_DO_REFL2TTEN=("TRUE" "true" "FALSE" "false" "NO" "no")
 valid_vals_USE_CUSTOM_POST_CONFIG_FILE=("TRUE" "true" "YES" "yes" "FALSE" "false" "NO" "no")
 valid_vals_DO_SHUM=("TRUE" "true" "YES" "yes" "FALSE" "false" "NO" "no")
 valid_vals_DO_SPPT=("TRUE" "true" "YES" "yes" "FALSE" "false" "NO" "no")

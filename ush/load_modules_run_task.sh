@@ -153,13 +153,22 @@ jjob_fp="$2"
 #-----------------------------------------------------------------------
 #
 machine=${MACHINE,,}
-env_fn="README_${machine}_${COMPILER}.txt"
-env_fp="${SR_WX_APP_TOP_DIR}/docs/${env_fn}"
+env_fn="build_${machine}_${COMPILER}.env"
+env_fp="${SR_WX_APP_TOP_DIR}/env/${env_fn}"
 source "${env_fp}" || print_err_msg_exit "\
 Sourcing platform- and compiler-specific environment file (env_fp) for the 
 workflow task specified by task_name failed:
   task_name = \"${task_name}\"
   env_fp = \"${env_fp}\""
+
+if [ ${task_name} = "run_anal_gsi" ]; then
+  source "${env_fp}_DA" || print_err_msg_exit "\
+  Sourcing platform- and compiler-specific environment file (env_fp) for the 
+  workflow task specified by task_name failed:
+    task_name = \"${task_name}\"
+    env_fp = \"${env_fp}_DA\""
+fi
+
 #
 #-----------------------------------------------------------------------
 #
@@ -307,7 +316,7 @@ ules_dir) for the specified task (task_name) failed:
   modulefile_local = \"${modulefile_local}\"
   modules_dir = \"${modules_dir}\""    
     fi
-
+#
 #  else # using default modulefile
 #
 #    module load "${default_modulefile_name}" || print_err_msg_exit "\

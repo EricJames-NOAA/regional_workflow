@@ -48,7 +48,6 @@ ushdir="${scrfunc_dir}"
 . $ushdir/source_util_funcs.sh
 . $ushdir/set_FV3nml_sfc_climo_filenames.sh
 . $ushdir/set_FV3nml_stoch_params.sh
-. $ushdir/create_diag_table_files.sh
 #
 #-----------------------------------------------------------------------
 #
@@ -164,6 +163,8 @@ settings="\
 # Parameters needed by the job scheduler.
 #
   'account': $ACCOUNT
+  'service_account': ${SERVICE_ACCOUNT:-$ACCOUNT}
+  'reservation': $RESERVATION
   'sched': $SCHED
   'partition_default': ${PARTITION_DEFAULT}
   'queue_default': ${QUEUE_DEFAULT}
@@ -171,7 +172,11 @@ settings="\
   'queue_hpss': ${QUEUE_HPSS}
   'partition_fcst': ${PARTITION_FCST}
   'queue_fcst': ${QUEUE_FCST}
+  'partition_graphics': ${PARTITION_GRAPHICS}
+  'queue_graphics': ${QUEUE_GRAPHICS}
   'machine': ${MACHINE}
+  'partition_analysis': ${PARTITION_ANALYSIS}
+  'queue_analysis': ${QUEUE_ANALYSIS}
 #
 # Workflow task names.
 #
@@ -180,10 +185,20 @@ settings="\
   'make_sfc_climo_tn': ${MAKE_SFC_CLIMO_TN}
   'get_extrn_ics_tn': ${GET_EXTRN_ICS_TN}
   'get_extrn_lbcs_tn': ${GET_EXTRN_LBCS_TN}
+  'get_extrn_lbcs_long_tn': ${GET_EXTRN_LBCS_LONG_TN}
   'make_ics_tn': ${MAKE_ICS_TN}
   'make_lbcs_tn': ${MAKE_LBCS_TN}
   'run_fcst_tn': ${RUN_FCST_TN}
   'run_post_tn': ${RUN_POST_TN}
+  'anal_gsi': ${ANAL_GSI_TN}
+  'prep_coldstart': ${PREP_COLDSTART_TN}
+  'prep_warmstart': ${PREP_WARMSTART_TN}
+  'process_radarref': ${PROCESS_RADAR_REF_TN}
+  'process_lightning': ${PROCESS_LIGHTNING_TN}
+  'process_bufr': ${PROCESS_BUFR_TN}
+  'radar_refl2tten': ${RADAR_REFL2TTEN_TN}
+  'cldanl_nonvar': ${CLDANL_NONVAR_TN}
+  'tag': ${TAG}
 #
 # Number of nodes to use for each task.
 #
@@ -194,13 +209,23 @@ settings="\
   'nnodes_get_extrn_lbcs': ${NNODES_GET_EXTRN_LBCS}
   'nnodes_make_ics': ${NNODES_MAKE_ICS}
   'nnodes_make_lbcs': ${NNODES_MAKE_LBCS}
+  'nnodes_run_prepstart': ${NNODES_RUN_PREPSTART}
   'nnodes_run_fcst': ${NNODES_RUN_FCST}
+  'nnodes_run_anal': ${NNODES_RUN_ANAL}
   'nnodes_run_post': ${NNODES_RUN_POST}
+  'nnodes_proc_radar': ${NNODES_PROC_RADAR}
+  'nnodes_proc_lightning': ${NNODES_PROC_LIGHTNING}
+  'nnodes_proc_bufr': ${NNODES_PROC_BUFR}
+  'nnodes_run_ref2tten': ${NNODES_RUN_REF2TTEN}
+  'nnodes_run_nonvarcldanl': ${NNODES_RUN_NONVARCLDANL}
+  'nnodes_run_graphics': ${NNODES_RUN_GRAPHICS}
 #
 # Number of cores used for a task
 #
   'ncores_run_fcst': ${PE_MEMBER01}
-  'native_run_fcst': --cpus-per-task 4 --exclusive
+  'native_run_fcst': --cpus-per-task 2 --exclusive
+  'ncores_run_anal': ${NCORES_RUN_ANAL}
+  'native_run_anal': --cpus-per-task 2 --exclusive
 #
 # Number of logical processes per node for each task.  If running without
 # threading, this is equal to the number of MPI processes per node.
@@ -212,8 +237,16 @@ settings="\
   'ppn_get_extrn_lbcs': ${PPN_GET_EXTRN_LBCS}
   'ppn_make_ics': ${PPN_MAKE_ICS}
   'ppn_make_lbcs': ${PPN_MAKE_LBCS}
+  'ppn_run_prepstart': ${PPN_RUN_PREPSTART}
   'ppn_run_fcst': ${PPN_RUN_FCST}
+  'ppn_run_anal': ${PPN_RUN_ANAL}
   'ppn_run_post': ${PPN_RUN_POST}
+  'ppn_proc_radar': ${PPN_PROC_RADAR}
+  'ppn_proc_lightning': ${PPN_PROC_LIGHTNING}
+  'ppn_proc_bufr': ${PPN_PROC_BUFR}
+  'ppn_run_ref2tten': ${PPN_RUN_REF2TTEN}
+  'ppn_run_nonvarcldanl': ${PPN_RUN_NONVARCLDANL}
+  'ppn_run_graphics': ${PPN_RUN_GRAPHICS}
 #
 # Maximum wallclock time for each task.
 #
@@ -224,8 +257,20 @@ settings="\
   'wtime_get_extrn_lbcs': ${WTIME_GET_EXTRN_LBCS}
   'wtime_make_ics': ${WTIME_MAKE_ICS}
   'wtime_make_lbcs': ${WTIME_MAKE_LBCS}
+  'wtime_run_prepstart': ${WTIME_RUN_PREPSTART}
   'wtime_run_fcst': ${WTIME_RUN_FCST}
+  'wtime_run_anal': ${WTIME_RUN_ANAL}
   'wtime_run_post': ${WTIME_RUN_POST}
+  'wtime_proc_radar': ${WTIME_PROC_RADAR}
+  'wtime_proc_lightning': ${WTIME_PROC_LIGHTNING}
+  'wtime_proc_bufr': ${WTIME_PROC_BUFR}
+  'wtime_run_ref2tten': ${WTIME_RUN_REF2TTEN}
+  'wtime_run_nonvarcldanl': ${WTIME_RUN_NONVARCLDANL}
+#
+# Maximum memory for each task.
+#
+  'memo_run_ref2tten': ${MEMO_RUN_REF2TTEN}
+  'memo_run_nonvarcldanl': ${MEMO_RUN_NONVARCLDANL}
 #
 # Maximum number of tries for each task.
 #
@@ -236,14 +281,24 @@ settings="\
   'maxtries_get_extrn_lbcs': ${MAXTRIES_GET_EXTRN_LBCS}
   'maxtries_make_ics': ${MAXTRIES_MAKE_ICS}
   'maxtries_make_lbcs': ${MAXTRIES_MAKE_LBCS}
+  'maxtries_run_prepstart': ${MAXTRIES_RUN_PREPSTART}
   'maxtries_run_fcst': ${MAXTRIES_RUN_FCST}
+  'maxtries_anal_gsi': ${MAXTRIES_ANAL_GSI}
   'maxtries_run_post': ${MAXTRIES_RUN_POST}
+  'maxtries_process_radarref': ${MAXTRIES_PROCESS_RADARREF}
+  'maxtries_process_lightning': ${MAXTRIES_PROCESS_LIGHTNING}
+  'maxtries_process_bufr': ${MAXTRIES_PROCESS_BUFR}
+  'maxtries_radar_ref2tten': ${MAXTRIES_RADAR_REF2TTEN}
+  'maxtries_cldanl_nonvar': ${MAXTRIES_CLDANL_NONVAR}
 #
 # Flags that specify whether to run the preprocessing tasks.
 #
   'run_task_make_grid': ${RUN_TASK_MAKE_GRID}
   'run_task_make_orog': ${RUN_TASK_MAKE_OROG}
   'run_task_make_sfc_climo': ${RUN_TASK_MAKE_SFC_CLIMO}
+#
+  'is_rtma':  ${IS_RTMA}
+  'fg_rootdir': ${FG_ROOTDIR}
 #
 # Number of physical cores per node for the current machine.
 #
@@ -261,18 +316,42 @@ settings="\
 #
   'extrn_mdl_name_ics': ${EXTRN_MDL_NAME_ICS}
   'extrn_mdl_name_lbcs': ${EXTRN_MDL_NAME_LBCS}
+  'extrn_mdl_sysbasedir_ics': ${EXTRN_MDL_SYSBASEDIR_ICS}
+  'extrn_mdl_sysbasedir_lbcs': ${EXTRN_MDL_SYSBASEDIR_LBCS}
+  'extrn_mdl_ics_offset_hrs': ${EXTRN_MDL_ICS_OFFSET_HRS}
+  'extrn_mdl_lbcs_offset_hrs': ${EXTRN_MDL_LBCS_OFFSET_HRS}
+  'extrn_mdl_lbcs_search_offset_hrs': ${EXTRN_MDL_LBCS_SEARCH_OFFSET_HRS}
+  'bc_update_interval': ${LBC_SPEC_INTVL_HRS}
 #
 # Parameters that determine the set of cycles to run.
 #
   'date_first_cycl': ${DATE_FIRST_CYCL}
   'date_last_cycl': ${DATE_LAST_CYCL}
   'cdate_first_cycl': !datetime ${DATE_FIRST_CYCL}${CYCL_HRS[0]}
+  'cdate_last_cycl': !datetime ${DATE_LAST_CYCL}${CYCL_HRS[0]}
+  'cdate_first_arch': !datetime ${DATE_FIRST_CYCL}07
+  'cdate_last_arch': !datetime ${DATE_LAST_CYCL}07
   'cycl_hrs': [ $( printf "\'%s\', " "${CYCL_HRS[@]}" ) ]
-  'cycl_freq': !!str 24:00:00
+  'cycl_freq': !!str 12:00:00
+  'at_start_cycledef': ${AT_START_CYCLEDEF}
+  'initial_cycledef': ${INITIAL_CYCLEDEF}
+  'boundary_cycledef': ${BOUNDARY_CYCLEDEF}
+  'boundary_long_cycledef': ${BOUNDARY_LONG_CYCLEDEF}
+  'prep_coldstart_cycledef': ${PREP_COLDSTART_CYCLEDEF}
+  'prep_warmstart_cycledef': ${PREP_WARMSTART_CYCLEDEF}
+  'analysis_cycledef': ${ANALYSIS_CYCLEDEF}
+  'forecast_cycledef': ${FORECAST_CYCLEDEF}
+  'postproc_cycledef': ${POSTPROC_CYCLEDEF}
+  'postproc_long_cycledef': ${POSTPROC_LONG_CYCLEDEF}
+  'archive_cycledef': ${ARCHIVE_CYCLEDEF}
 #
-# Forecast length (same for all cycles).
+# boundary, forecast, and post process length.
 #
   'fcst_len_hrs': ${FCST_LEN_HRS}
+  'boundary_len_hrs': ${BOUNDARY_LEN_HRS}
+  'boundary_long_len_hrs': ${BOUNDARY_LONG_LEN_HRS}
+  'postproc_len_hrs': ${POSTPROC_LEN_HRS}
+  'postproc_long_len_hrs': ${POSTPROC_LONG_LEN_HRS}
 #
 # Ensemble-related parameters.
 #
@@ -282,6 +361,22 @@ settings="\
   'ensmem_indx_name': ${ensmem_indx_name}
   'uscore_ensmem_name': ${uscore_ensmem_name}
   'slash_ensmem_subdir': ${slash_ensmem_subdir}
+#
+# data assimilation related parameters.
+#
+  'do_dacycle': ${DO_DACYCLE}
+  'da_cycle_interval_hrs': ${DA_CYCLE_INTERV}
+  'do_nonvar_cldanal': ${DO_NONVAR_CLDANAL}
+  'do_refl2tten': ${DO_REFL2TTEN}
+#
+# graphics related parameters
+#
+  'tilelabels': ${TILE_LABELS}
+  'tilesets': ${TILE_SETS}
+#
+#  retrospective experiments
+#
+  'do_retro': ${DO_RETRO}
 " # End of "settings" variable.
 
 print_info_msg $VERBOSE "
@@ -312,73 +407,7 @@ are:
   Namelist settings specified on command line:
     settings =
 $settings"
-#
-#-----------------------------------------------------------------------
-#
-# Create the cycle directories.
-#
-#-----------------------------------------------------------------------
-#
-print_info_msg "$VERBOSE" "
-Creating the cycle directories..."
 
-for (( i=0; i<${NUM_CYCLES}; i++ )); do
-  cdate="${ALL_CDATES[$i]}"
-  cycle_dir="${CYCLE_BASEDIR}/$cdate"
-  mkdir_vrfy -p "${cycle_dir}"
-done
-#
-#-----------------------------------------------------------------------
-#
-# For select workflow tasks, copy the system-specific environment and
-# module settings README file from the ufs-srweather-app repository to 
-# the appropriate subdirectory under the workflow directory tree.  In 
-# principle, sourcing this file is better than having hard-coded module
-# files for tasks because the copied module files will always be 
-# up-to-date.
-#
-#-----------------------------------------------------------------------
-#
-#machine=${MACHINE,,}
-
-#cd_vrfy "${MODULES_DIR}/tasks/$machine"
-
-#cp_vrfy -f "${SR_WX_APP_TOP_DIR}/docs/README_${machine}_intel.txt" "${MAKE_GRID_TN}"
-#cp_vrfy -f "${SR_WX_APP_TOP_DIR}/docs/README_${machine}_intel.txt" "${MAKE_OROG_TN}"
-#cp_vrfy -f "${SR_WX_APP_TOP_DIR}/docs/README_${machine}_intel.txt" "${MAKE_SFC_CLIMO_TN}"
-#cp_vrfy -f "${SR_WX_APP_TOP_DIR}/docs/README_${machine}_intel.txt" "${MAKE_ICS_TN}"
-#cp_vrfy -f "${SR_WX_APP_TOP_DIR}/docs/README_${machine}_intel.txt" "${MAKE_LBCS_TN}"
-#if [ $MACHINE = "WCOSS_CRAY" -o $MACHINE = "WCOSS_DELL_P3" ] ; then
-#  cp_vrfy -f "${UFS_WTHR_MDL_DIR}/modulefiles/${machine}/fv3" "${RUN_FCST_TN}"
-#else
-#  cp_vrfy -f "${UFS_WTHR_MDL_DIR}/modulefiles/${machine}.intel/fv3" "${RUN_FCST_TN}"
-#fi
-#cp_vrfy -f "${SR_WX_APP_TOP_DIR}/docs/README_${machine}_intel.txt" "${RUN_FCST_TN}"
-
-task_names=( "${MAKE_GRID_TN}" "${MAKE_OROG_TN}" "${MAKE_SFC_CLIMO_TN}" "${MAKE_ICS_TN}" "${MAKE_LBCS_TN}" "${RUN_FCST_TN}" )
-#
-# Only some platforms build EMC_post using modules, and some machines 
-# require a different EMC_post modulefile name.
-#
-#if [ "${MACHINE}" = "CHEYENNE" ]; then
-#  print_info_msg "No post modulefile needed for ${MACHINE}"
-#elif [ "${MACHINE}" = "WCOSS_CRAY" ]; then
-#  cp_vrfy -f "${EMC_POST_DIR}/modulefiles/post/v8.0.0-cray-intel" "${RUN_POST_TN}"
-#  cp_vrfy -f "${SR_WX_APP_TOP_DIR}/docs/README_${machine}_intel.txt" "${RUN_POST_TN}"
-#  task_names+=("${RUN_POST_TN}")
-#else
-#  cp_vrfy -f "${SR_WX_APP_TOP_DIR}/docs/README_${machine}_intel.txt" "${RUN_POST_TN}"
-#  task_names+=("${RUN_POST_TN}")
-#fi
-
-#for task in "${task_names[@]}"; do
-#  modulefile_local="${task}.local"
-#  if [ -f ${modulefile_local} ]; then
-#    cat "${modulefile_local}" >> "${task}"
-#  fi
-#done
-
-#cd_vrfy -
 #
 #-----------------------------------------------------------------------
 #
@@ -459,16 +488,71 @@ fi
 #
 #-----------------------------------------------------------------------
 #
-# Copy fixed files from system directory to the FIXam directory (which
-# is under the experiment directory).  Note that some of these files get
-# renamed during the copy process.
+# Create the FIXam directory under the experiment directory.  In NCO mode,
+# this will be a symlink to the directory specified in FIXgsm, while in
+# community mode, it will be an actual directory with files copied into
+# it from FIXgsm.
 #
 #-----------------------------------------------------------------------
 #
+# First, consider NCO mode.
+#
+if [ "${RUN_ENVIR}" = "nco" ]; then
 
-# In NCO mode, we assume the following copy operation is done beforehand,
-# but that can be changed.
-if [ "${RUN_ENVIR}" != "nco" ]; then
+  if [ "${DO_DACYCLE}" = "true" ]; then
+# Resolve the target directory that the FIXgsi symlink points to
+    ln_vrfy -fsn "$FIX_GSI" "$FIXgsi"
+
+    path_resolved=$( readlink -m "$FIXgsi" )
+    if [ ! -d "${path_resolved}" ]; then
+      print_err_msg_exit "\
+    Missing link to FIXgsi
+    RUN_ENVIR = \"${RUN_ENVIR}\"
+    FIXgsi = \"$FIXgsi\"
+    path_resolved = \"${path_resolved}\"
+    Please ensure that path_resolved is an existing directory and then rerun
+    the experiment generation script."
+    fi
+#
+
+# Resolve the target directory that the FIXcrtm symlink points to
+    ln_vrfy -fsn "$FIX_CRTM" "$FIXcrtm"
+
+    path_resolved=$( readlink -m "$FIXcrtm" )
+    if [ ! -d "${path_resolved}" ]; then
+      print_err_msg_exit "\
+    Missing link to FIXcrtm
+    RUN_ENVIR = \"${RUN_ENVIR}\"
+    FIXcrtm = \"$FIXcrtm\"
+    path_resolved = \"${path_resolved}\"
+    Please ensure that path_resolved is an existing directory and then rerun
+    the experiment generation script."
+    fi
+
+  fi  # check if DA
+
+  ln_vrfy -fsn "$FIXgsm" "$FIXam"
+#
+# Resolve the target directory that the FIXam symlink points to and check 
+# that it exists.
+#
+  path_resolved=$( readlink -m "$FIXam" )
+  if [ ! -d "${path_resolved}" ]; then
+    print_err_msg_exit "\
+In order to be able to generate a forecast experiment in NCO mode (i.e.
+when RUN_ENVIR set to \"nco\"), the path specified by FIXam after resolving
+all symlinks (path_resolved) must be an existing directory (but in this
+case isn't):
+  RUN_ENVIR = \"${RUN_ENVIR}\"
+  FIXam = \"$FIXam\"
+  path_resolved = \"${path_resolved}\"
+Please ensure that path_resolved is an existing directory and then rerun
+the experiment generation script."
+  fi
+#
+# Now consider community mode.
+#
+else
 
   print_info_msg "$VERBOSE" "
 Copying fixed files from system directory (FIXgsm) to a subdirectory
@@ -521,68 +605,6 @@ cp_vrfy "${CCPP_PHYS_SUITE_IN_CCPP_FP}" "${CCPP_PHYS_SUITE_FP}"
 #
 #-----------------------------------------------------------------------
 #
-# Copy the forecast model executable from its location in the directory
-# in which the forecast model repository was cloned (UFS_WTHR_MDL_DIR)
-# to the executables directory (EXECDIR).
-#
-# Note that if there is already an experiment that is running the forecast
-# task (so that the forecast model executable in EXECDIR is in use) and
-# the user tries to generate another experiment, the generation of this
-# second experiment will fail because the operating system won't allow
-# the existing executable in EXECDIR to be overwritten (because it is
-# "busy", i.e. in use by the first experiment).  For this reason, below,
-# we try to prevent this situation by comparing the ages of the source
-# and target executables and attempting the copy only if the source one
-# is newer (or if the target doesn't exist).  This will very likely prevent
-# the situation described above, but it doesn't guarantee that it will
-# never happen (it will still happen if an experiment is running a forecast
-# while the user rebuilts the forecast model and attempts to generate a
-# new experiment.  For this reason, this copy operation should really be
-# performed duirng the build step, not here.
-#
-# Question:
-# Why doesn't the build script(s) perform this action?  It should...
-#
-#-----------------------------------------------------------------------
-#
-exec_fn="NEMS.exe"
-exec_fp="${SR_WX_APP_TOP_DIR}/bin/${exec_fn}"
-#Check for the old build location for fv3 executable
-if [ ! -f "${exec_fp}" ]; then
-  exec_fp_alt="${UFS_WTHR_MDL_DIR}/build/${exec_fn}"
-  if [ ! -f "${exec_fp_alt}" ]; then
-    print_err_msg_exit "\
-The executable (exec_fp) for running the forecast model does not exist:
-  exec_fp = \"${exec_fp}\"
-Please ensure that you've built this executable."
-  else
-    exec_fp="${exec_fp_alt}"
-  fi
-fi
-
-if [ ! -f "${exec_fp}" ]; then
-  print_err_msg_exit "\
-The executable (exec_fp) for running the forecast model does not exist:
-  exec_fp = \"${exec_fp}\"
-Please ensure that you've built this executable."
-fi
-#
-# Make a copy of the executable in the executables directory only if a
-# copy doens't already exist or if a copy does exist but is older than
-# the original.
-#
-if [ ! -e "${FV3_EXEC_FP}" ] || \
-   [ "${exec_fp}" -nt "${FV3_EXEC_FP}" ]; then
-  print_info_msg "$VERBOSE" "
-Copying the FV3-LAM executable (exec_fp) to the executables directory
-(EXECDIR):
-  exec_fp = \"${exec_fp}\"
-  EXECDIR = \"$EXECDIR\""
-  cp_vrfy "${exec_fp}" "${FV3_EXEC_FP}"
-fi
-#
-#-----------------------------------------------------------------------
-#
 # Set parameters in the FV3-LAM namelist file.
 #
 #-----------------------------------------------------------------------
@@ -599,30 +621,36 @@ Setting parameters in FV3 namelist file (FV3_NML_FP):
 npx=$((NX+1))
 npy=$((NY+1))
 #
-# For the physics suites that use RUC-LSM, set the parameter
-# lsoil according to the external models used to obtain ICs and LBCs.
+# For the physics suites that use RUC LSM, set the parameter kice to 9,
+# Otherwise, leave it unspecified (which means it gets set to the default
+# value in the forecast model).
 #
-if [ "${CCPP_PHYS_SUITE}" = "FV3_GSD_v0" ] || \
-   [ "${CCPP_PHYS_SUITE}" = "FV3_GSD_SAR" ]; then
-
-  if [ "${EXTRN_MDL_NAME_ICS}" = "NAM" ] || \
-     [ "${EXTRN_MDL_NAME_ICS}" = "GSMGFS" ] || \
-     [ "${EXTRN_MDL_NAME_ICS}" = "FV3GFS" ]; then
-    lsoil=4
-  elif [ "${EXTRN_MDL_NAME_ICS}" = "RAP" ] || \
-       [ "${EXTRN_MDL_NAME_ICS}" = "HRRR" ]; then
-    lsoil=9
-  else
-    print_err_msg_exit "\
-The value to set the variable lsoil to in the FV3 namelist file (FV3_NML_FP)
-has not been specified for the following combination of physics suite and
-external model for ICs:
-  CCPP_PHYS_SUITE = \"${CCPP_PHYS_SUITE}\"
-  EXTRN_MDL_NAME_ICS = \"${EXTRN_MDL_NAME_ICS}\"
-Please change one or more of these parameters or provide a value for lsoil
-(and change workflow generation script(s) accordingly) and rerun."
-  fi
-
+# NOTE:
+# May want to remove kice from FV3.input.yml (and maybe input.nml.FV3).
+#
+kice=""
+if [ "${SDF_USES_RUC_LSM}" = "TRUE" ]; then
+  kice="9"
+fi
+#
+# Set lsoil, which is the number of input soil levels provided in the 
+# chgres_cube output NetCDF file.  This is the same as the parameter 
+# nsoill_out in the namelist file for chgres_cube.  [On the other hand, 
+# the parameter lsoil_lsm (not set here but set in input.nml.FV3 and/or 
+# FV3.input.yml) is the number of soil levels that the LSM scheme in the
+# forecast model will run with.]  Here, we use the same approach to set
+# lsoil as the one used to set nsoill_out in exregional_make_ics.sh.  
+# See that script for details.
+#
+# NOTE:
+# May want to remove lsoil from FV3.input.yml (and maybe input.nml.FV3).
+# Also, may want to set lsm here as well depending on SDF_USES_RUC_LSM.
+#
+lsoil="4"
+if [ "${EXTRN_MDL_NAME_ICS}" = "HRRR" -o \
+     "${EXTRN_MDL_NAME_ICS}" = "RAP" ] && \
+   [ "${SDF_USES_RUC_LSM}" = "TRUE" ]; then
+  lsoil="9"
 fi
 #
 # Create a multiline variable that consists of a yaml-compliant string
@@ -630,6 +658,17 @@ fi
 # suite-independent need to be set to.  Below, this variable will be
 # passed to a python script that will in turn set the values of these
 # variables in the namelist file.
+#
+# IMPORTANT:
+# If we want a namelist variable to be removed from the namelist file,
+# in the "settings" variable below, we need to set its value to the
+# string "null".  This is equivalent to setting its value to 
+#    !!python/none
+# in the base namelist file specified by FV3_NML_BASE_SUITE_FP or the 
+# suite-specific yaml settings file specified by FV3_NML_YAML_CONFIG_FP.
+#
+# It turns out that setting the variable to an empty string also works
+# to remove it from the namelist!  Which is better to use??
 #
 settings="\
 'atmos_model_nml': {
@@ -640,6 +679,8 @@ settings="\
     'target_lon': ${LON_CTR},
     'target_lat': ${LAT_CTR},
     'nrows_blend': ${HALO_BLEND},
+    'regional_bcs_from_gsi': FALSE,
+    'write_restart_with_bcs': FALSE,
 #
 # Question:
 # For a ESGgrid type grid, what should stretch_fac be set to?  This depends
@@ -655,6 +696,7 @@ settings="\
     'bc_update_interval': ${LBC_SPEC_INTVL_HRS},
   }
 'gfs_physics_nml': {
+    'kice': ${kice:-null},
     'lsoil': ${lsoil:-null},
     'do_shum': ${DO_SHUM},
     'do_sppt': ${DO_SPPT},
@@ -793,10 +835,37 @@ Call to function to set stochastic parameters in the FV3 namelist files
 for the various ensemble members failed."
   fi
 
-  create_diag_table_files || print_err_msg_exit "\
-Call to function to create a diagnostics table file under each cycle 
-directory failed."
+fi
 
+if [ "${DO_DACYCLE}" = "true" ]; then
+# need to generate a namelist for da cycle
+ settings="\
+ 'fv_core_nml': {
+     'external_ic': false,
+     'make_nh'    : false,
+     'na_init'    : 0,
+     'nggps_ic'   : false,
+     'mountain'  : true,
+     'warm_start' : true,
+   }
+ 'gfs_physics_nml': {
+    'fh_dfi_radar': [${FH_DFI_RADAR[@]}],
+  }"
+ 
+ $USHDIR/set_namelist.py -q \
+                         -n ${FV3_NML_FP} \
+                         -u "$settings" \
+                         -o ${FV3_NML_RESTART_FP} || \
+   print_err_msg_exit "\
+ Call to python script set_namelist.py to generate an restart FV3 namelist file
+ failed.  Parameters passed to this script are:
+   Full path to base namelist file:
+     FV3_NML_FP = \"${FV3_NML_FP}\"
+   Full path to output namelist file for DA:
+     FV3_NML_RESTART_FP = \"${FV3_NML_RESTART_FP}\"
+   Namelist settings specified on command line:
+     settings =
+ $settings"
 fi
 #
 #-----------------------------------------------------------------------
@@ -916,6 +985,10 @@ fi
 { restore_shell_opts; } > /dev/null 2>&1
 
 }
+
+
+
+
 #
 #-----------------------------------------------------------------------
 #
@@ -926,6 +999,7 @@ fi
 #
 set -u
 #set -x
+[[ ! -f config.sh ]] && echo "config.sh not found!" && exit 1
 #
 #-----------------------------------------------------------------------
 #

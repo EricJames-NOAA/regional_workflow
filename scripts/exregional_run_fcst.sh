@@ -17,6 +17,7 @@
 #-----------------------------------------------------------------------
 #
 . $USHDIR/create_model_configure_file.sh
+. $USHDIR/create_diag_table_file.sh
 #
 #-----------------------------------------------------------------------
 #
@@ -92,7 +93,12 @@ case $MACHINE in
   "WCOSS_CRAY")
     ulimit -s unlimited
     ulimit -a
-    APRUN="aprun -b -j1 -n${PE_MEMBER01} -N24 -d1 -cc depth"
+
+    if [ ${PE_MEMBER01} -gt 24 ];then
+      APRUN="aprun -b -j1 -n${PE_MEMBER01} -N24 -d1 -cc depth"
+    else
+      APRUN="aprun -b -j1 -n24 -N24 -d1 -cc depth"
+    fi
     ;;
 
   "WCOSS_DELL_P3")
@@ -118,7 +124,7 @@ case $MACHINE in
     ulimit -s unlimited
     ulimit -a
     APRUN="srun"
-    OMP_NUM_THREADS=4
+    OMP_NUM_THREADS=2
     ;;
 
   "ODIN")
@@ -174,7 +180,7 @@ the grid and (filtered) orography files ..."
 cd_vrfy ${run_dir}/INPUT
 
 relative_or_null=""
-if [ "${RUN_TASK_MAKE_GRID}" = "TRUE" ]; then
+if [ "${RUN_TASK_MAKE_GRID}" = "TRUE" ] && [ "${MACHINE}" != "WCOSS_CRAY" ]; then
   relative_or_null="--relative"
 fi
 
@@ -239,7 +245,7 @@ fi
 
 
 relative_or_null=""
-if [ "${RUN_TASK_MAKE_OROG}" = "TRUE" ]; then
+if [ "${RUN_TASK_MAKE_OROG}" = "TRUE" ] && [ "${MACHINE}" != "WCOSS_CRAY" ] ; then
   relative_or_null="--relative"
 fi
 
@@ -253,6 +259,7 @@ else
 Cannot create symlink because target does not exist:
   target = \"$target\""
 fi
+
 #
 # Symlink to halo-4 orography file with "${CRES}_" stripped from name.
 #
@@ -274,6 +281,34 @@ else
   print_err_msg_exit "\
 Cannot create symlink because target does not exist:
   target = \"$target\""
+fi
+
+#
+# If using the FV3_HRRR or FV3_RAP physics suites, there are two files 
+# (that contain statistics of the orography) that are needed by the gravity 
+# wave drag parameterization in that suite.  Below, create symlinks to these 
+# files in the run directory.  Note that the symlinks must have specific names 
+# that the FV3 model is hardcoded to recognize, and those are the names 
+# we use below.
+#
+if [ "${CCPP_PHYS_SUITE}" = "FV3_HRRR" ] || \
+   [ "${CCPP_PHYS_SUITE}" = "FV3_RAP" ]; then
+
+
+  fileids=( "ss" "ls" )
+  for fileid in "${fileids[@]}"; do
+    target="${FIXLAM}/${CRES}${DOT_OR_USCORE}oro_data_${fileid}.tile${TILE_RGNL}.halo${NH0}.nc"
+    symlink="oro_data_${fileid}.nc"
+    if [ -f "${target}" ]; then
+      ln_vrfy -sf ${relative_or_null} $target $symlink
+    else
+      print_err_msg_exit "\
+Cannot create symlink because target does not exist:
+  target = \"${target}\"
+  symlink = \"${symlink}\""
+    fi
+  done
+
 fi
 
 
@@ -300,31 +335,53 @@ of the current run directory (run_dir), where
   run_dir = \"${run_dir}\"
 ..."
 
+BKTYPE=1    # cold start using INPUT
+if [ -r ${CYCLE_DIR}/fcst_fv3lam/INPUT/fv_tracer.res.tile1.nc ]; then
+  BKTYPE=0  # cycling using RESTART
+fi
+print_info_msg "$VERBOSE" "
+The forecast has BKTYPE $BKTYPE (1:cold start ; 0 cycling)"
+
 cd_vrfy ${run_dir}/INPUT
 #ln_vrfy -sf gfs_data.tile${TILE_RGNL}.halo${NH0}.nc gfs_data.nc
 #ln_vrfy -sf sfc_data.tile${TILE_RGNL}.halo${NH0}.nc sfc_data.nc
 
 relative_or_null=""
 
-target="gfs_data.tile${TILE_RGNL}.halo${NH0}.nc"
+if [ ${BKTYPE} -eq 1 ]; then
+  target="gfs_data.tile${TILE_RGNL}.halo${NH0}.nc"
+else
+  target="fv_core.res.tile1.nc"
+fi
 symlink="gfs_data.nc"
 if [ -f "${target}" ]; then
   ln_vrfy -sf ${relative_or_null} $target $symlink
 else
   print_err_msg_exit "\
-Cannot create symlink because target does not exist:
+  Cannot create symlink because target does not exist:
   target = \"$target\""
 fi
 
-target="sfc_data.tile${TILE_RGNL}.halo${NH0}.nc"
-symlink="sfc_data.nc"
-if [ -f "${target}" ]; then
-  ln_vrfy -sf ${relative_or_null} $target $symlink
+if [ ${BKTYPE} -eq 1 ]; then
+  target="sfc_data.tile${TILE_RGNL}.halo${NH0}.nc"
+  symlink="sfc_data.nc"
+  if [ -f "${target}" ]; then
+    ln_vrfy -sf ${relative_or_null} $target $symlink
+  else
+    print_err_msg_exit "\
+    Cannot create symlink because target does not exist:
+    target = \"$target\""
+  fi
 else
-  print_err_msg_exit "\
-Cannot create symlink because target does not exist:
-  target = \"$target\""
+  if [ -f "sfc_data.nc" ]; then
+    print_info_msg "$VERBOSE" "
+    sfc_data.nc is available at INPUT directory"
+  else
+    print_err_msg_exit "\
+    sfc_data.nc is not available for cycling"
+  fi
 fi
+
 #
 #-----------------------------------------------------------------------
 #
@@ -345,7 +402,7 @@ static) files in the FIXam directory:
   run_dir = \"${run_dir}\""
 
 relative_or_null=""
-if [ "${RUN_ENVIR}" != "nco" ]; then
+if [ "${RUN_ENVIR}" != "nco" ] && [ "${MACHINE}" != "WCOSS_CRAY" ] ; then
   relative_or_null="--relative"
 fi
 
@@ -395,7 +452,7 @@ Creating links in the current run directory to cycle-independent model
 input files in the main experiment directory..."
 
 relative_or_null=""
-if [ "${RUN_ENVIR}" != "nco" ]; then
+if [ "${RUN_ENVIR}" != "nco" ] && [ "${MACHINE}" != "WCOSS_CRAY" ] ; then
   relative_or_null="--relative"
 fi
 
@@ -406,7 +463,13 @@ ln_vrfy -sf ${relative_or_null} ${NEMS_CONFIG_FP} ${run_dir}
 if [ "${DO_ENSEMBLE}" = TRUE ]; then
   ln_vrfy -sf ${relative_or_null} "${FV3_NML_ENSMEM_FPS[$(( 10#${ensmem_indx}-1 ))]}" ${run_dir}/${FV3_NML_FN}
 else
-  ln_vrfy -sf ${relative_or_null} ${FV3_NML_FP} ${run_dir}
+   if [ ${BKTYPE} -eq 0 ]; then
+    # cycling, using namelist for cycling forecast
+    ln_vrfy -sf ${relative_or_null} ${FV3_NML_RESTART_FP} ${run_dir}/input.nml
+  else
+    # cold start, using namelist for cold start
+    ln_vrfy -sf ${relative_or_null} ${FV3_NML_FP} ${run_dir}
+  fi
 fi
 #
 #-----------------------------------------------------------------------
@@ -424,6 +487,21 @@ Call to function to create a model configuration file for the current
 cycle's (cdate) run directory (run_dir) failed:
   cdate = \"${cdate}\"
   run_dir = \"${run_dir}\""
+
+#
+#-----------------------------------------------------------------------
+#
+# Call the function that creates the model configuration file within each
+# cycle directory.
+#
+#-----------------------------------------------------------------------
+#
+create_diag_table_file \
+  run_dir="${run_dir}" || print_err_msg_exit "\
+  Call to function to create a diag table file for the current.
+cycle's (cdate) run directory (run_dir) failed:
+  run_dir = \"${run_dir}\""
+
 #
 #-----------------------------------------------------------------------
 #
@@ -436,7 +514,11 @@ cycle's (cdate) run directory (run_dir) failed:
 #-----------------------------------------------------------------------
 #
 if [ "${DO_ENSEMBLE}" = "TRUE" ]; then
-  relative_or_null="--relative"
+  if [ "${MACHINE}" = "WCOSS_CRAY" ]; then
+    relative_or_null=""
+  else
+    relative_or_null="--relative"
+  fi
   diag_table_fp="${cycle_dir}/${DIAG_TABLE_FN}"
   ln_vrfy -sf ${relative_or_null} ${diag_table_fp} ${run_dir}
 fi
@@ -451,6 +533,27 @@ export KMP_AFFINITY=scatter
 export OMP_NUM_THREADS=${OMP_NUM_THREADS:-1} #Needs to be 1 for dynamic build of CCPP with GFDL fast physics, was 2 before.
 export OMP_STACKSIZE=1024m
 
+#
+#-----------------------------------------------------------------------
+#
+# If INPUT/phy_data.nc exists, convert it from NetCDF4 to NetCDF3
+# (happens for cycled runs, not cold-started)
+#
+#-----------------------------------------------------------------------
+#
+cd INPUT
+if [[ -f phy_data.nc ]] ; then
+  rm -f phy_data.nc3 phy_data.nc4
+  cp -fp phy_data.nc phy_data.nc4
+  if ( ! time ( module purge ; module load intel szip hdf5 netcdf nco ; module list ; set -x ; ncks -3 --64 phy_data.nc4 phy_data.nc3) ) ; then
+    mv -f phy_data.nc4 phy_data.nc
+    rm -f phy_data.nc3
+    echo "NetCDF 3=>4 conversion failed. :-( Continuing with NetCDF 4 data."
+  else
+    mv -f phy_data.nc3 phy_data.nc
+  fi
+fi
+cd ..
 #
 #-----------------------------------------------------------------------
 #

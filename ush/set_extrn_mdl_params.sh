@@ -43,7 +43,7 @@ local func_name="${FUNCNAME[0]}"
 #
 #-----------------------------------------------------------------------
 #
-if [ "${RUN_ENVIR}" = "nco" ]; then
+if [[ "${RUN_ENVIR}" == "nco" && ! -z ${COMINgfs} ]]; then
 
   EXTRN_MDL_SYSBASEDIR_ICS="$COMINgfs"
 
@@ -95,7 +95,7 @@ else
       EXTRN_MDL_SYSBASEDIR_ICS=""
       ;;
     "JET")
-      EXTRN_MDL_SYSBASEDIR_ICS="/public/data/grids/gfs/nemsio"
+      EXTRN_MDL_SYSBASEDIR_ICS="/public/data/grids/gfs/0p25deg/grib2"
       ;;
     "ODIN")
       EXTRN_MDL_SYSBASEDIR_ICS="/scratch/ywang/test_runs/FV3_regional/gfs"
@@ -118,7 +118,7 @@ else
       EXTRN_MDL_SYSBASEDIR_ICS=""
       ;;
     "JET")
-      EXTRN_MDL_SYSBASEDIR_ICS="/misc/whome/rtrr/rap"
+      EXTRN_MDL_SYSBASEDIR_ICS="/public/data/grids/rap/full/wrfnat/grib2"
       ;;
     "CHEYENNE")
       EXTRN_MDL_SYSBASEDIR_ICS="dummy_value"
@@ -135,7 +135,7 @@ else
       EXTRN_MDL_SYSBASEDIR_ICS=""
       ;;
     "JET")
-      EXTRN_MDL_SYSBASEDIR_ICS="/misc/whome/rtrr/hrrr"
+      EXTRN_MDL_SYSBASEDIR_ICS="/public/data/grids/hrrr/conus/wrfnat/grib2"
       ;;
     "CHEYENNE")
       EXTRN_MDL_SYSBASEDIR_ICS="dummy_value"
@@ -146,6 +146,13 @@ else
   esac
 
 fi
+#
+#  for retro, the external boundary could come from other location.
+#
+if [[ "${DO_RETRO}" == "true" && ! -z "${EXTRN_MDL_SOURCE_BASEDIR_ICS}" ]]; then
+      EXTRN_MDL_SYSBASEDIR_ICS="${EXTRN_MDL_SOURCE_BASEDIR_ICS}"
+fi
+
 #
 # If EXTRN_MDL_SYSBASEDIR_ICS has not been set (not even to a null string), 
 # print out an error message and exit.
@@ -168,20 +175,22 @@ fi
 #
 #-----------------------------------------------------------------------
 #
-case ${EXTRN_MDL_NAME_LBCS} in
-  "GSMGFS")
-    EXTRN_MDL_LBCS_OFFSET_HRS="0"
-    ;;
-  "FV3GFS")
-    EXTRN_MDL_LBCS_OFFSET_HRS="0"
-    ;;
-  "RAP")
-    EXTRN_MDL_LBCS_OFFSET_HRS="3"
-    ;;
-  "HRRR")
-    EXTRN_MDL_LBCS_OFFSET_HRS="0"
-    ;;
-esac
+if [[ -z ${EXTRN_MDL_LBCS_OFFSET_HRS} ]]; then
+  case ${EXTRN_MDL_NAME_LBCS} in
+    "GSMGFS")
+      EXTRN_MDL_LBCS_OFFSET_HRS="0"
+      ;;
+    "FV3GFS")
+      EXTRN_MDL_LBCS_OFFSET_HRS="0"
+      ;;
+    "RAP")
+      EXTRN_MDL_LBCS_OFFSET_HRS="3"
+      ;;
+    "HRRR")
+      EXTRN_MDL_LBCS_OFFSET_HRS="0"
+      ;;
+  esac
+fi
 #
 #-----------------------------------------------------------------------
 #
@@ -197,7 +206,7 @@ esac
 #
 #-----------------------------------------------------------------------
 #
-if [ "${RUN_ENVIR}" = "nco" ]; then
+if [[ "${RUN_ENVIR}" == "nco" && ! -z ${COMINgfs} ]]; then
 
   EXTRN_MDL_SYSBASEDIR_LBCS="$COMINgfs"
 
@@ -249,7 +258,7 @@ else
       EXTRN_MDL_SYSBASEDIR_LBCS=""
       ;;
     "JET")
-      EXTRN_MDL_SYSBASEDIR_LBCS="/public/data/grids/gfs/nemsio"
+      EXTRN_MDL_SYSBASEDIR_LBCS="/public/data/grids/gfs/0p25deg/grib2"
       ;;
     "ODIN")
       EXTRN_MDL_SYSBASEDIR_LBCS="/scratch/ywang/test_runs/FV3_regional/gfs"
@@ -272,7 +281,7 @@ else
       EXTRN_MDL_SYSBASEDIR_LBCS=""
       ;;
     "JET")
-      EXTRN_MDL_SYSBASEDIR_LBCS="/misc/whome/rtrr/rap"
+      EXTRN_MDL_SYSBASEDIR_LBCS="/public/data/grids/rap/full/wrfnat/grib2"
       ;;
     "CHEYENNE")
       EXTRN_MDL_SYSBASEDIR_LBCS="dummy_value"
@@ -289,7 +298,7 @@ else
       EXTRN_MDL_SYSBASEDIR_LBCS=""
       ;;
     "JET")
-      EXTRN_MDL_SYSBASEDIR_LBCS="/misc/whome/rtrr/hrrr"
+      EXTRN_MDL_SYSBASEDIR_LBCS="/public/data/grids/hrrr/conus/wrfnat/grib2"
       ;;
     esac
     ;;
@@ -297,6 +306,12 @@ else
   esac
 
 fi
+
+
+if [[ "${DO_RETRO}" == "true" && ! -z "${EXTRN_MDL_SOURCE_BASEDIR_LBCS}" ]]; then
+      EXTRN_MDL_SYSBASEDIR_LBCS="${EXTRN_MDL_SOURCE_BASEDIR_LBCS}"
+fi
+
 #
 # If EXTRN_MDL_SYSBASEDIR_LBCS has not been set (not even to a null string), 
 # print out an error message and exit.

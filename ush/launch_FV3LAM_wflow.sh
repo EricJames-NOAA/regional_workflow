@@ -91,13 +91,24 @@ expt_name="${EXPT_SUBDIR}"
 #
 #-----------------------------------------------------------------------
 #
-if [ "$MACHINE" != "CHEYENNE" ]; then
-  if [ "$MACHINE" = "ORION" ]; then
-    module load contrib rocoto
-  else
-    module purge
-    module load rocoto
-  fi
+if [ "$MACHINE" = "CHEYENNE" ]; then
+  module use -a /glade/p/ral/jntp/UFS_SRW_app/modules/
+  module load rocoto
+elif [ "$MACHINE" = "ORION" ]; then
+  module load contrib rocoto
+elif [ "$MACHINE" = "WCOSS_DELL_P3" ]; then
+  module purge
+  module load lsf/10.1
+  module use /gpfs/dell3/usrx/local/dev/emc_rocoto/modulefiles/
+  module load ruby/2.5.1 rocoto/1.3.0rc2 #rocoto/1.2.4
+elif [ "$MACHINE" = "WCOSS_CRAY" ]; then
+  module purge
+  module load xt-lsfhpc/9.1.3
+  module use -a /usrx/local/emc_rocoto/modulefiles
+  module load rocoto/1.2.4
+else
+  module purge
+  module load rocoto
 fi
 #
 #-----------------------------------------------------------------------
@@ -111,6 +122,12 @@ fi
 rocoto_xml_bn=$( basename "${WFLOW_XML_FN}" ".xml" )
 rocoto_database_fn="${rocoto_xml_bn}.db"
 launch_log_fn="log.launch_${rocoto_xml_bn}"
+
+logs=`echo ${LOGDIR} | rev | cut -f 3- -d / | rev`
+latest=$(ls -td $logs/*/* | head -n 1)
+
+wflow_launch_log_fp=${latest}/${WFLOW_LAUNCH_LOG_FN}
+
 #
 #-----------------------------------------------------------------------
 #
@@ -177,12 +194,13 @@ rm "${tmp_fn}"
 error_msg="sbatch: error: Batch job submission failed:"
 # Job violates accounting/QOS policy (job submit limit, user's size and/or time limits)"
 while read -r line; do
-  grep_output=$( printf "$line" | grep "${error_msg}" )
+  grep_output=$( echo "$line" | grep "${error_msg}" )
   if [ $? -eq 0 ]; then
     wflow_status="FAILURE"
     break
   fi
 done <<< "${rocotorun_output}"
+
 #
 #-----------------------------------------------------------------------
 #
@@ -204,12 +222,13 @@ rocotostat_cmd="rocotostat -w \"${WFLOW_XML_FN}\" -d \"${rocoto_database_fn}\" -
 
 #rocotostat_output=$( pwd; rocotostat -w "${WFLOW_XML_FN}" -d "${rocoto_database_fn}" -v 10 2>&1 )
 #rocotostat_output=$( rocotostat -w "${WFLOW_XML_FN}" -d "${rocoto_database_fn}" -v 10 2>&1 )
-rocotostat_output=$( eval ${rocotostat_cmd} 2>&1 )
+#rocotostat_output=$( eval ${rocotostat_cmd} 2>&1 )
 #rocotostat_output=$( ${rocotostat_cmd} 2>&1 )
 #rocotostat_output=$( { pwd; ls -alF; } 2>&1 )
+rocotostat_output=''
 error_msg="DEAD"
 while read -r line; do
-  grep_output=$( printf "$line" | grep "${error_msg}" )
+  grep_output=$( echo "$line" | grep "${error_msg}" )
   if [ $? -eq 0 ]; then
     wflow_status="FAILURE"
     break
@@ -248,7 +267,7 @@ Output of rocotostat_cmd is:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ${rocotostat_output}
-" >> "${WFLOW_LAUNCH_LOG_FN}" 2>&1
+" >> "${wflow_launch_log_fp}" 2>&1
 #
 #-----------------------------------------------------------------------
 #
@@ -340,7 +359,7 @@ Summary of workflow status:
 End of output from script \"${scrfunc_fn}\".
 ========================================================================
 
-" >> ${WFLOW_LAUNCH_LOG_FN} 2>&1
+" >> ${wflow_launch_log_fp} 2>&1
 #
 #-----------------------------------------------------------------------
 #
@@ -396,7 +415,7 @@ launch script for this experiment:
 #
 # Print the workflow completion message to the launch log file.
 #
-  printf "$msg" >> ${WFLOW_LAUNCH_LOG_FN} 2>&1
+  printf "$msg" >> ${wflow_launch_log_fp} 2>&1
 #
 # If the stdout from this script is being sent to the screen (e.g. it is
 # not being redirected to a file), then also print out the workflow 
