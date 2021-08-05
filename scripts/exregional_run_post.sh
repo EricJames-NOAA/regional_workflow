@@ -285,7 +285,6 @@ mv_vrfy BGRD3D.GrbF${post_fhr} ${bgrd3d}
 # small subset of surface fields for testbed and internal use
 #wgrib2 -match "APCP|parmcat=16 parm=196|PRATE" ${bgrd3d} -grib ${bgsfc}
 
-#rm_vrfy -rf ${fhr_dir}
 #
 #-----------------------------------------------------------------------
 #
