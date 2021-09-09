@@ -22,6 +22,7 @@ GWD_HRRRsuite_BASEDIR=/mnt/lfs4/BMC/nrtrr/RRFS/fix/fix_lam.20210128
 
 FIX_GSI=/mnt/lfs4/BMC/nrtrr/RRFS/fix/fix_gsi
 FIX_CRTM=/home/rtrr/FIX_EXEC_MODULE/crtm/CRTM_v2.3.0
+FIX_UPP=/mnt/lfs4/BMC/nrtrr/RRFS/fix/fix_upp
 
 if [[ $MACHINE == "hera" ]] ; then
   ACCOUNT="wrfruc"
@@ -35,6 +36,7 @@ if [[ $MACHINE == "hera" ]] ; then
 
   FIX_GSI=/scratch1/BMC/zrtrr/RRFS/fix/fix_gsi
   FIX_CRTM=/scratch1/BMC/zrtrr/RRFS/fix/CRTM_v2.3.0
+  FIX_UPP=/scratch1/BMC/zrtrr/RRFS/fix/fix_upp
   AIRCRAFT_REJECT=${FIX_GSI}
   SFCOBS_USELIST=${FIX_GSI}
 

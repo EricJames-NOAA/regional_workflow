@@ -737,6 +737,7 @@ case $MACHINE in
     FIXLAM_NCO_BASEDIR=${FIXLAM_NCO_BASEDIR:-"/needs/to/be/specified"}
     FIX_GSI=${FIX_GSI:-"/mnt/lfs4/BMC/nrtrr/RRFS/fix/fix_gsi"}
     FIX_CRTM=${FIX_CRTM:-"/mnt/lfs4/BMC/nrtrr/RRFS/fix/fix_crtm"}
+    FIX_UPP=${FIX_CRTM:-"/mnt/lfs4/BMC/nrtrr/RRFS/fix/fix_upp"}
     ;;
 
   "ODIN")
@@ -1207,6 +1208,9 @@ check_for_preexist_dir_file "$EXPTDIR" "${PREEXISTING_DIR_METHOD}"
 # FIXcrtm:
 # This is the directory that will contain the coefficient files for CRTM
 #
+# FIXupp:
+# This is the directory that will contain the UPP fix files
+#
 # CYCLE_BASEDIR:
 # The base directory in which the directories for the various cycles will
 # be placed.
@@ -1239,6 +1243,7 @@ FIXam="${EXPTDIR}/fix_am"
 FIXLAM="${EXPTDIR}/fix_lam"
 FIXgsi="${EXPTDIR}/fix_gsi"
 FIXcrtm="${EXPTDIR}/fix_crtm"
+FIXupp="${EXPTDIR}/fix_upp"
 
 if [ "${RUN_ENVIR}" = "nco" ]; then
 
@@ -2556,6 +2561,7 @@ ENKF_FCST="${ENKF_FCST}"
 
 FIX_GSI="${FIX_GSI}"
 FIX_CRTM="${FIX_CRTM}"
+FIX_UPP="${FIX_UPP}"
 AIRCRAFT_REJECT="${AIRCRAFT_REJECT}"
 SFCOBS_USELIST="${SFCOBS_USELIST}"
 

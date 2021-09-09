@@ -1308,6 +1308,9 @@ SFC_CLIMO_FIELDS=( \
 # FIX_CRTM:
 # System directory in which the CRTM coefficient files are located 
 #
+# FIX_UPP:
+# System directory in which the UPP fix files are located
+#
 # FNGLAC, ..., FNMSKH:
 # Names of (some of the) global data files that are assumed to exist in 
 # a system directory specified (this directory is machine-dependent; 
@@ -1364,6 +1367,7 @@ TOPO_DIR=""
 SFC_CLIMO_INPUT_DIR=""
 FIX_GSI=""
 FIX_CRTM=""
+FIX_UPP=""
 
 FNGLAC="global_glacier.2x2.grb"
 FNMXIC="global_maxice.2x2.grb"

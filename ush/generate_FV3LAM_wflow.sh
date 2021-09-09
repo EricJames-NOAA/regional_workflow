@@ -541,6 +541,21 @@ if [ "${RUN_ENVIR}" = "nco" ]; then
     Please ensure that path_resolved is an existing directory and then rerun
     the experiment generation script."
     fi
+#
+
+# Resolve the target directory that the FIXupp symlink points to
+    ln_vrfy -fsn "$FIX_UPP" "$FIXupp"
+
+    path_resolved=$( readlink -m "$FIXupp" )
+    if [ ! -d "${path_resolved}" ]; then
+      print_err_msg_exit "\
+    Missing link to FIXupp
+    RUN_ENVIR = \"${RUN_ENVIR}\"
+    FIXupp = \"$FIXupp\"
+    path_resolved = \"${path_resolved}\"
+    Please ensure that path_resolved is an existing directory and then rerun
+    the experiment generation script."
+    fi
 
   fi  # check if DA
 
