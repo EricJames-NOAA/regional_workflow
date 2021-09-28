@@ -32,6 +32,7 @@ if [[ $MACHINE == "hera" ]] ; then
   OBSPATH=/scratch2/BMC/public/data/grids/rap/obs
   OBSPATH_NSSLMOSIAC=/scratch2/BMC/public/data/radar/nssl/mrms/conus
   FFG_DIR=/public/data/grids/ncep/ffg/grib2
+  ARI_DIR=/lfs4/BMC/wrfruc/ejames/datasets/ari/erickson
   LIGHTNING_ROOT=/scratch2/BMC/public/data/lightning
   ENKF_FCST=/scratch1/NCEPDEV/rstprod/com/gfs/prod
 fi
