@@ -203,12 +203,6 @@ if [ ${NET} = "RRFS_CONUS" ] || [ ${NET} = "RRFS_NA_3km" ]; then
   if [ -f ${ARI_DIR}/allusa100yr01ha.st4grid2_update3.grb2 ]; then
     wgrib2 ${ARI_DIR}/allusa100yr01ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari100y_01h.grib2
   fi
-  if [ -f ${ARI_DIR}/allusa50yr01ha.st4grid2_update3.grb2 ]; then
-    wgrib2 ${ARI_DIR}/allusa50yr01ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari50y_01h.grib2
-  fi
-  if [ -f ${ARI_DIR}/allusa25yr01ha.st4grid2_update3.grb2 ]; then
-    wgrib2 ${ARI_DIR}/allusa25yr01ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari25y_01h.grib2
-  fi
   if [ -f ${ARI_DIR}/allusa10yr01ha.st4grid2_update3.grb2 ]; then
     wgrib2 ${ARI_DIR}/allusa10yr01ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari10y_01h.grib2
   fi
@@ -218,17 +212,8 @@ if [ ${NET} = "RRFS_CONUS" ] || [ ${NET} = "RRFS_NA_3km" ]; then
   if [ -f ${ARI_DIR}/allusa2yr01ha.st4grid2_update3.grb2 ]; then
     wgrib2 ${ARI_DIR}/allusa2yr01ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari2y_01h.grib2
   fi
-  if [ -f ${ARI_DIR}/allusa1yr01ha.st4grid2_update3.grb2 ]; then
-    wgrib2 ${ARI_DIR}/allusa1yr01ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari1y_01h.grib2
-  fi
   if [ -f ${ARI_DIR}/allusa100yr03ha.st4grid2_update3.grb2 ]; then
     wgrib2 ${ARI_DIR}/allusa100yr03ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari100y_03h.grib2
-  fi
-  if [ -f ${ARI_DIR}/allusa50yr03ha.st4grid2_update3.grb2 ]; then
-    wgrib2 ${ARI_DIR}/allusa50yr03ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari50y_03h.grib2
-  fi
-  if [ -f ${ARI_DIR}/allusa25yr03ha.st4grid2_update3.grb2 ]; then
-    wgrib2 ${ARI_DIR}/allusa25yr03ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari25y_03h.grib2
   fi
   if [ -f ${ARI_DIR}/allusa10yr03ha.st4grid2_update3.grb2 ]; then
     wgrib2 ${ARI_DIR}/allusa10yr03ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari10y_03h.grib2
@@ -239,17 +224,8 @@ if [ ${NET} = "RRFS_CONUS" ] || [ ${NET} = "RRFS_NA_3km" ]; then
   if [ -f ${ARI_DIR}/allusa2yr03ha.st4grid2_update3.grb2 ]; then
     wgrib2 ${ARI_DIR}/allusa2yr03ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari2y_03h.grib2
   fi
-  if [ -f ${ARI_DIR}/allusa1yr03ha.st4grid2_update3.grb2 ]; then
-    wgrib2 ${ARI_DIR}/allusa1yr03ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari1y_03h.grib2
-  fi
   if [ -f ${ARI_DIR}/allusa100yr06ha.st4grid2_update3.grb2 ]; then
     wgrib2 ${ARI_DIR}/allusa100yr06ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari100y_06h.grib2
-  fi
-  if [ -f ${ARI_DIR}/allusa50yr06ha.st4grid2_update3.grb2 ]; then
-    wgrib2 ${ARI_DIR}/allusa50yr06ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari50y_06h.grib2
-  fi
-  if [ -f ${ARI_DIR}/allusa25yr06ha.st4grid2_update3.grb2 ]; then
-    wgrib2 ${ARI_DIR}/allusa25yr06ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari25y_06h.grib2
   fi
   if [ -f ${ARI_DIR}/allusa10yr06ha.st4grid2_update3.grb2 ]; then
     wgrib2 ${ARI_DIR}/allusa10yr06ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari10y_06h.grib2
@@ -260,17 +236,8 @@ if [ ${NET} = "RRFS_CONUS" ] || [ ${NET} = "RRFS_NA_3km" ]; then
   if [ -f ${ARI_DIR}/allusa2yr06ha.st4grid2_update3.grb2 ]; then
     wgrib2 ${ARI_DIR}/allusa2yr06ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari2y_06h.grib2
   fi
-  if [ -f ${ARI_DIR}/allusa1yr06ha.st4grid2_update3.grb2 ]; then
-    wgrib2 ${ARI_DIR}/allusa1yr06ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari1y_06h.grib2
-  fi
   if [ -f ${ARI_DIR}/allusa100yr12ha.st4grid2_update3.grb2 ]; then
     wgrib2 ${ARI_DIR}/allusa100yr12ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari100y_12h.grib2
-  fi
-  if [ -f ${ARI_DIR}/allusa50yr12ha.st4grid2_update3.grb2 ]; then
-    wgrib2 ${ARI_DIR}/allusa50yr12ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari50y_12h.grib2
-  fi
-  if [ -f ${ARI_DIR}/allusa25yr12ha.st4grid2_update3.grb2 ]; then
-    wgrib2 ${ARI_DIR}/allusa25yr12ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari25y_12h.grib2
   fi
   if [ -f ${ARI_DIR}/allusa10yr12ha.st4grid2_update3.grb2 ]; then
     wgrib2 ${ARI_DIR}/allusa10yr12ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari10y_12h.grib2
@@ -281,17 +248,8 @@ if [ ${NET} = "RRFS_CONUS" ] || [ ${NET} = "RRFS_NA_3km" ]; then
   if [ -f ${ARI_DIR}/allusa2yr12ha.st4grid2_update3.grb2 ]; then
     wgrib2 ${ARI_DIR}/allusa2yr12ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari2y_12h.grib2
   fi
-  if [ -f ${ARI_DIR}/allusa1yr12ha.st4grid2_update3.grb2 ]; then
-    wgrib2 ${ARI_DIR}/allusa1yr12ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari1y_12h.grib2
-  fi
   if [ -f ${ARI_DIR}/allusa100yr24ha.st4grid2_update3.grb2 ]; then
     wgrib2 ${ARI_DIR}/allusa100yr24ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari100y_24h.grib2
-  fi
-  if [ -f ${ARI_DIR}/allusa50yr24ha.st4grid2_update3.grb2 ]; then
-    wgrib2 ${ARI_DIR}/allusa50yr24ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari50y_24h.grib2
-  fi
-  if [ -f ${ARI_DIR}/allusa25yr24ha.st4grid2_update3.grb2 ]; then
-    wgrib2 ${ARI_DIR}/allusa25yr24ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari25y_24h.grib2
   fi
   if [ -f ${ARI_DIR}/allusa10yr24ha.st4grid2_update3.grb2 ]; then
     wgrib2 ${ARI_DIR}/allusa10yr24ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari10y_24h.grib2
@@ -301,9 +259,6 @@ if [ ${NET} = "RRFS_CONUS" ] || [ ${NET} = "RRFS_NA_3km" ]; then
   fi
   if [ -f ${ARI_DIR}/allusa2yr24ha.st4grid2_update3.grb2 ]; then
     wgrib2 ${ARI_DIR}/allusa2yr24ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari2y_24h.grib2
-  fi
-  if [ -f ${ARI_DIR}/allusa1yr24ha.st4grid2_update3.grb2 ]; then
-    wgrib2 ${ARI_DIR}/allusa1yr24ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari1y_24h.grib2
   fi
 fi
 #
