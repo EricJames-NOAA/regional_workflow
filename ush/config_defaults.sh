@@ -268,6 +268,7 @@ EXPT_SUBDIR=""
 #    LIGHTNING_ROOT: location of lightning observations
 #    ENKF_FCSTL: location of global ensemble forecast
 #    FFG_DIR: location of flash flood guidance for QPF comparison
+#    ARI_DIR: location of average recurrence interval data for QPF comparison
 
 # Setup default locations for global SST and update time:
 #   SST_ROOT: locations of global SST
