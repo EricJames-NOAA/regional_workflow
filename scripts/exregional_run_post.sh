@@ -278,20 +278,79 @@ fi
 cp_vrfy ${post_config_fp} ./postxconfig-NT.txt
 cp_vrfy ${post_params_fp} ./params_grib2_tbl_new
 cp_vrfy ${EXECDIR}/upp.x .
-if [ -f ${FFG_DIR}/latest.FFG ] && [ ${NET} = "RRFS_CONUS" ]; then
-  cp_vrfy ${FFG_DIR}/latest.FFG .
+if [ ${NET} = "RRFS_CONUS" ]; then
   grid_specs_rrfs="lambert:-97.5:38.500000 237.826355:1746:3000 21.885885:1014:3000"
-  wgrib2 latest.FFG -match "0-12 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_12h.grib2
-  wgrib2 latest.FFG -match "0-6 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_06h.grib2
-  wgrib2 latest.FFG -match "0-3 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_03h.grib2
-  wgrib2 latest.FFG -match "0-1 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_01h.grib2
-elif [ -f ${FFG_DIR}/latest.FFG ] && [ ${NET} = "RRFS_NA_3km" ]; then
-  cp_vrfy ${FFG_DIR}/latest.FFG .
+elif [ ${NET} = "RRFS_NA_3km" ]; then
   grid_specs_rrfs="rot-ll:248.000000:-42.000000:0.000000 309.000000:4081:0.025000 -33.0000000:2641:0.025000"
-  wgrib2 latest.FFG -match "0-12 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_12h.grib2
-  wgrib2 latest.FFG -match "0-6 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_06h.grib2
-  wgrib2 latest.FFG -match "0-3 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_03h.grib2
-  wgrib2 latest.FFG -match "0-1 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_01h.grib2
+fi
+if [ ${NET} = "RRFS_CONUS" ] || [ ${NET} = "RRFS_NA_3km" ]; then
+  if [-f ${FFG_DIR}/latest.FFG ]; then
+    cp_vrfy ${FFG_DIR}/latest.FFG .
+    wgrib2 latest.FFG -match "0-12 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_12h.grib2
+    wgrib2 latest.FFG -match "0-6 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_06h.grib2
+    wgrib2 latest.FFG -match "0-3 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_03h.grib2
+    wgrib2 latest.FFG -match "0-1 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_01h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa100yr01ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa100yr01ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari100y_01h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa10yr01ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa10yr01ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari10y_01h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa5yr01ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa5yr01ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari5y_01h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa2yr01ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa2yr01ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari2y_01h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa100yr03ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa100yr03ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari100y_03h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa10yr03ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa10yr03ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari10y_03h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa5yr03ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa5yr03ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari5y_03h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa2yr03ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa2yr03ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari2y_03h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa100yr06ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa100yr06ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari100y_06h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa10yr06ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa10yr06ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari10y_06h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa5yr06ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa5yr06ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari5y_06h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa2yr06ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa2yr06ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari2y_06h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa100yr12ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa100yr12ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari100y_12h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa10yr12ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa10yr12ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari10y_12h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa5yr12ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa5yr12ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari5y_12h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa2yr12ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa2yr12ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari2y_12h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa100yr24ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa100yr24ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari100y_24h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa10yr24ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa10yr24ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari10y_24h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa5yr24ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa5yr24ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari5y_24h.grib2
+  fi
+  if [ -f ${ARI_DIR}/allusa2yr24ha.st4grid2_update3.grb2 ]; then
+    wgrib2 ${ARI_DIR}/allusa2yr24ha.st4grid2_update3.grb2 -match "0-1 day" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ari2y_24h.grib2
+  fi
 fi
 #
 #-----------------------------------------------------------------------

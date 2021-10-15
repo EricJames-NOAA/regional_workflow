@@ -16,6 +16,7 @@ fi
 
 OBSPATH_NSSLMOSIAC=/public/data/radar/nssl/mrms/conus
 FFG_DIR=/public/data/grids/ncep/ffg/grib2
+ARI_DIR=/lfs4/BMC/wrfruc/ejames/datasets/ari/erickson
 RADARREFL_TIMELEVEL=(0)
 FH_DFI_RADAR=""
 
