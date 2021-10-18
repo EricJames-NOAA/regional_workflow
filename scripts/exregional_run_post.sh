@@ -286,7 +286,7 @@ elif [ ${NET} = "RRFS_NA_13km" ]; then
   grid_specs_rrfs="rot-ll:254.000000:-36.000000:0.000000 304.174600:956:0.1169118 -48.5768500:831:0.1170527"
 fi
 if [ ${NET} = "RRFS_CONUS" ] || [ ${NET} = "RRFS_NA_3km" ] || [ ${NET} = "RRFS_NA_13km" ]; then
-  if [-f ${FFG_DIR}/latest.FFG ]; then
+  if [ -f ${FFG_DIR}/latest.FFG ]; then
     cp_vrfy ${FFG_DIR}/latest.FFG .
     wgrib2 latest.FFG -match "0-12 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_12h.grib2
     wgrib2 latest.FFG -match "0-6 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_06h.grib2
