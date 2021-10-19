@@ -278,14 +278,14 @@ fi
 cp_vrfy ${post_config_fp} ./postxconfig-NT.txt
 cp_vrfy ${post_params_fp} ./params_grib2_tbl_new
 cp_vrfy ${EXECDIR}/upp.x .
-if [ ${NET} = "RRFS_CONUS" ]; then
+if [ ${PREDEF_GRID_NAME} = "RRFS_CONUS_3km" ]; then
   grid_specs_rrfs="lambert:-97.5:38.500000 237.826355:1746:3000 21.885885:1014:3000"
-elif [ ${NET} = "RRFS_NA_3km" ]; then
+elif [ ${PREDEF_GRID_NAME} = "RRFS_NA_3km" ]; then
   grid_specs_rrfs="rot-ll:248.000000:-42.000000:0.000000 309.000000:4081:0.025000 -33.0000000:2641:0.025000"
-elif [ ${NET} = "RRFS_NA_13km" ]; then
+elif [ ${PREDEF_GRID_NAME} = "GSD_RAP13km" ]; then
   grid_specs_rrfs="rot-ll:254.000000:-36.000000:0.000000 304.174600:956:0.1169118 -48.5768500:831:0.1170527"
 fi
-if [ ${NET} = "RRFS_CONUS" ] || [ ${NET} = "RRFS_NA_3km" ] || [ ${NET} = "RRFS_NA_13km" ]; then
+if [ ${PREDEF_GRID_NAME} = "RRFS_CONUS_3km" ] || [ ${PREDEF_GRID_NAME} = "RRFS_NA_3km" ] || [ ${PREDEF_GRID_NAME} = "GSD_RAP13km" ]; then
   if [ -f ${FFG_DIR}/latest.FFG ]; then
     cp_vrfy ${FFG_DIR}/latest.FFG .
     wgrib2 latest.FFG -match "0-12 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_12h.grib2
@@ -293,65 +293,65 @@ if [ ${NET} = "RRFS_CONUS" ] || [ ${NET} = "RRFS_NA_3km" ] || [ ${NET} = "RRFS_N
     wgrib2 latest.FFG -match "0-3 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_03h.grib2
     wgrib2 latest.FFG -match "0-1 hour" -end -new_grid_interpolation bilinear -new_grid_winds grid -new_grid ${grid_specs_rrfs} ffg_01h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari100y_01h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari100y_01h_${NET}.grib2 ./ari100y_01h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari100y_01h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari100y_01h.grib2 ./ari100y_01h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari10y_01h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari10y_01h_${NET}.grib2 ./ari10y_01h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari10y_01h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari10y_01h.grib2 ./ari10y_01h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari5y_01h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari5y_01h_${NET}.grib2 ./ari5y_01h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari5y_01h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari5y_01h.grib2 ./ari5y_01h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari2y_01h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari2y_01h_${NET}.grib2 ./ari5y_01h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari2y_01h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari2y_01h.grib2 ./ari5y_01h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari100y_03h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari100y_03h_${NET}.grib2 ./ari100y_03h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari100y_03h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari100y_03h.grib2 ./ari100y_03h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari10y_03h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari10y_03h_${NET}.grib2 ./ari10y_03h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari10y_03h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari10y_03h.grib2 ./ari10y_03h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari5y_03h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari5y_03h_${NET}.grib2 ./ari5y_03h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari5y_03h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari5y_03h.grib2 ./ari5y_03h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari2y_03h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari2y_03h_${NET}.grib2 ./ari5y_03h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari2y_03h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari2y_03h.grib2 ./ari5y_03h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari100y_06h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari100y_06h_${NET}.grib2 ./ari100y_06h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari100y_06h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari100y_06h.grib2 ./ari100y_06h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari10y_06h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari10y_06h_${NET}.grib2 ./ari10y_06h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari10y_06h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari10y_06h.grib2 ./ari10y_06h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari5y_06h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari5y_06h_${NET}.grib2 ./ari5y_06h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari5y_06h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari5y_06h.grib2 ./ari5y_06h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari2y_06h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari2y_06h_${NET}.grib2 ./ari5y_06h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari2y_06h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari2y_06h.grib2 ./ari5y_06h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari100y_12h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari100y_12h_${NET}.grib2 ./ari100y_12h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari100y_12h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari100y_12h.grib2 ./ari100y_12h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari10y_12h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari10y_12h_${NET}.grib2 ./ari10y_12h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari10y_12h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari10y_12h.grib2 ./ari10y_12h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari5y_12h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari5y_12h_${NET}.grib2 ./ari5y_12h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari5y_12h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari5y_12h.grib2 ./ari5y_12h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari2y_12h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari2y_12h_${NET}.grib2 ./ari5y_12h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari2y_12h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari2y_12h.grib2 ./ari5y_12h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari100y_24h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari100y_24h_${NET}.grib2 ./ari100y_24h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari100y_24h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari100y_24h.grib2 ./ari100y_24h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari10y_24h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari10y_24h_${NET}.grib2 ./ari10y_24h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari10y_24h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari10y_24h.grib2 ./ari10y_24h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari5y_24h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari5y_24h_${NET}.grib2 ./ari5y_24h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari5y_24h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari5y_24h.grib2 ./ari5y_24h.grib2
   fi
-  if [ -f ${FIX_UPP}/ari2y_24h_${NET}.grib2 ]; then
-    cp_vrfy ${FIX_UPP}/ari2y_24h_${NET}.grib2 ./ari5y_24h.grib2
+  if [ -f ${FIX_UPP}/${PREDEF_GRID_NAME}/ari2y_24h.grib2 ]; then
+    cp_vrfy ${FIX_UPP}/${PREDEF_GRID_NAME}/ari2y_24h.grib2 ./ari5y_24h.grib2
   fi
 fi
 #
