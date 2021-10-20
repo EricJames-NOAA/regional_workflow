@@ -47,7 +47,6 @@ ushdir="${scrfunc_dir}"
 #
 . $ushdir/source_util_funcs.sh
 . $ushdir/set_FV3nml_sfc_climo_filenames.sh
-. $ushdir/set_FV3nml_stoch_params.sh
 #
 #-----------------------------------------------------------------------
 #
@@ -383,6 +382,7 @@ settings="\
   'ensmem_indx_name': ${ensmem_indx_name}
   'uscore_ensmem_name': ${uscore_ensmem_name}
   'slash_ensmem_subdir': ${slash_ensmem_subdir}
+  'do_enscontrol': ${DO_ENSCONTROL}
 #
 # data assimilation related parameters.
 #
@@ -681,7 +681,8 @@ fi
 #
 lsoil="4"
 if [ "${EXTRN_MDL_NAME_ICS}" = "HRRR" -o \
-     "${EXTRN_MDL_NAME_ICS}" = "RAP" ] && \
+     "${EXTRN_MDL_NAME_ICS}" = "RAP" -o \
+     "${EXTRN_MDL_NAME_ICS}" = "HRRRDAS" ] && \
    [ "${SDF_USES_RUC_LSM}" = "TRUE" ]; then
   lsoil="9"
 fi
@@ -734,6 +735,7 @@ settings="\
     'do_shum': ${DO_SHUM},
     'do_sppt': ${DO_SPPT},
     'do_skeb': ${DO_SKEB},
+    'print_diff_pgr': ${PRINT_DIFF_PGR},
   }
 'nam_stochy': {
     'shum': ${SHUM_MAG},
@@ -861,12 +863,6 @@ if [ "${RUN_TASK_MAKE_GRID}" = "FALSE" ]; then
   set_FV3nml_sfc_climo_filenames || print_err_msg_exit "\
 Call to function to set surface climatology file names in the FV3 namelist
 file failed."
-
-  if [ "${DO_ENSEMBLE}" = TRUE ]; then
-    set_FV3nml_stoch_params || print_err_msg_exit "\
-Call to function to set stochastic parameters in the FV3 namelist files
-for the various ensemble members failed."
-  fi
 
 fi
 

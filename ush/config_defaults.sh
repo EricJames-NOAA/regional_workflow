@@ -1787,6 +1787,15 @@ USE_ZMTNBLCK="false"
 HALO_BLEND=10
 #
 #-----------------------------------------------------------------------
+# 
+# PRINT_DIFF_PGR:
+# Option to turn on/off pressure tendency diagnostic
+#
+#-----------------------------------------------------------------------
+#
+PRINT_DIFF_PGR=.false.
+#
+#-----------------------------------------------------------------------
 #
 # USE_FVCOM:
 # Flag set to update surface conditions in FV3-LAM with fields generated
@@ -1889,3 +1898,6 @@ CLEAN_OLDRUN_HRS="48"
 CLEAN_OLDFCST_HRS="24"
 CLEAN_OLDSTMPPOST_HRS="24"
 CLEAN_NWGES_HRS="72"
+
+# in ensemble mode, whether or not to run member 1 as control member
+DO_ENSCONTROL="FALSE"
