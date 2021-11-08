@@ -189,13 +189,13 @@ post_hh=${post_time:8:2}
 
 cat > itag <<EOF
 &model_inputs
-fileName='${dyn_file}'
-IOFORM='netcdf'
-grib='grib2'
-DateStr='${post_yyyy}-${post_mm}-${post_dd}_${post_hh}:00:00'
-MODELNAME='${POST_FULL_MODEL_NAME}'
-fileNameFlux='${phy_file}'
-fileNameFlat='postxconfig-NT.txt'
+ fileName='${dyn_file}'
+ IOFORM='netcdf'
+ grib='grib2'
+ DateStr='${post_yyyy}-${post_mm}-${post_dd}_${post_hh}:00:00'
+ MODELNAME='${POST_FULL_MODEL_NAME}'
+ fileNameFlux='${phy_file}'
+ fileNameFlat='postxconfig-NT.txt'
 /
 
  &NAMPGB
