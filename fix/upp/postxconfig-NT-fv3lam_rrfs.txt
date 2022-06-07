@@ -1,7 +1,7 @@
 2
 220
 277
-BGDAWP
+PRSLEV
 32769
 ncep_nco
 v2003
@@ -10266,7 +10266,7 @@ top_of_atmos
 ?
 ?
 ?
-BGRD3D
+NATLEV
 32769
 ncep_nco
 v2003
