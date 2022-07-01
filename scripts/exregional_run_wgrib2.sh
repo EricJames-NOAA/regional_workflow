@@ -229,7 +229,7 @@ if [[ ! -z ${TESTBED_FIELDS_FN} ]]; then
 fi
 if [[ ! -z ${TESTBED_FIELDS_FN2} ]]; then
   if [[ -f ${FIX_UPP}/${TESTBED_FIELDS_FN2} ]]; then
-    wgrib2 ${bgrd3d} | grep -F -f ${FIX_UPP}/${TESTBED_FIELDS_FN2} | wgrib2 -i -grib ${bgsfc} ${bgrd3d}
+    wgrib2 ${bgrd3d} | grep -F -f ${FIX_UPP}/${TESTBED_FIELDS_FN2} | wgrib2 -i -append -grib ${bgsfc} ${bgrd3d}
   else
     echo "${FIX_UPP}/${TESTBED_FIELDS_FN2} not found"
   fi
