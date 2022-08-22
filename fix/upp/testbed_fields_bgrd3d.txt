@@ -1,13 +1,13 @@
-:var discipline=3 center=7 local_table=1 parmcat=192 parm=20:top of atmosphere:
-:var discipline=3 center=7 local_table=1 parmcat=192 parm=21:top of atmosphere:
-:var discipline=3 center=7 local_table=1 parmcat=192 parm=22:top of atmosphere:
-:var discipline=3 center=7 local_table=1 parmcat=192 parm=23:top of atmosphere:
-:var discipline=3 center=7 local_table=1 parmcat=192 parm=24:top of atmosphere:
-:var discipline=3 center=7 local_table=1 parmcat=192 parm=25:top of atmosphere:
-:var discipline=3 center=7 local_table=1 parmcat=192 parm=26:top of atmosphere:
-:var discipline=3 center=7 local_table=1 parmcat=192 parm=27:top of atmosphere:
-:var discipline=3 center=7 local_table=1 parmcat=192 parm=28:top of atmosphere:
-:var discipline=3 center=7 local_table=1 parmcat=192 parm=29:top of atmosphere:
+:SBTA167:top of atmosphere:
+:SBTA168:top of atmosphere:
+:SBTA169:top of atmosphere:
+:SBTA1610:top of atmosphere:
+:SBTA1611:top of atmosphere:
+:SBTA1612:top of atmosphere:
+:SBTA1613:top of atmosphere:
+:SBTA1614:top of atmosphere:
+:SBTA1615:top of atmosphere:
+:SBTA1616:top of atmosphere:
 :var discipline=3 center=7 local_table=1 parmcat=192 parm=77:top of atmosphere:
 :var discipline=3 center=7 local_table=1 parmcat=192 parm=78:top of atmosphere:
 :var discipline=3 center=7 local_table=1 parmcat=192 parm=79:top of atmosphere:
