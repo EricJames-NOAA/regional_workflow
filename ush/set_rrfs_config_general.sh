@@ -14,7 +14,7 @@ if [[ $MACHINE == "jet" ]] ; then
     QUEUE_ANALYSIS="rth"
     QUEUE_PRDGEN="rt"
     QUEUE_GRAPHICS="rt"
-    QUEUE_HPSS="rt"
+    QUEUE_HPSS="batch"
     QUEUE_POST="rt"
     RESERVATION_POST="rrfsdet"
     NNODES_MAKE_ICS="3"
